@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ELS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <div id="app">
+        <svg width="0" height="0" style="position: absolute;">
+            <defs>
+                <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#6366f1" />
+                    <stop offset="100%" stop-color="#f472b6" />
+                </linearGradient>
+            </defs>
+        </svg>
+        <div class="bg-elements">
+            <div class="bg-circle circle-1"></div>
+            <div class="bg-circle circle-2"></div>
+            <div class="bg-circle circle-3"></div>
+        </div>
+        
+        <div class="container">
+            <header>
+                <div class="logo">
+                    <svg class="logo-icon" viewBox="0 0 24 24">
+                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" fill="none" stroke="url(#gradient)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    ELS
+                </div>
+                <div class="nav">
+                    <div class="nav-item" v-for="(command, index) in commands" :key="index" @click="scrollToCommand(index)" :class="{active: activeCommand === index}">
+                        {{ command.name[currentLanguage] }}
+                    </div>
+                </div>
+                <div class="language-selector" :class="{open: languageDropdownOpen}">
+                    <button class="language-switcher" @click="languageDropdownOpen = !languageDropdownOpen">
+                        <img :src="languages[currentLanguage].flag" 
+                             :alt="languages[currentLanguage].name" 
+                             class="language-flag">
+                        <span>{{ languages[currentLanguage].name }}</span>
+                        <i class="fas" :class="languageDropdownOpen ? 'fa-chevron-up' : 'fa-chevron-down'" style="font-size: 0.7rem;"></i>
+                    </button>
+                    <div class="language-dropdown" v-if="languageDropdownOpen">
+                        <div class="language-option" v-for="(lang, code) in languages" :key="code" @click="changeLanguage(code)">
+                            <img :src="lang.flag" :alt="lang.name" class="language-flag">
+                            <span>{{ lang.name }}</span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            
+            <div class="content">
+                <h1 class="title">{{ translations.title[currentLanguage] }}</h1>
+                <p class="subtitle">
+                    {{ translations.subtitle[currentLanguage] }}
+                </p>
+                
+                <div class="commands">
+                    <div class="command-card" v-for="(command, index) in commands" :key="index" :id="'command-'+index">
+                        <div class="command-icon">
+                            <i :class="command.icon"></i>
+                        </div>
+                        <div class="command-name">{{ command.prefix }}{{ command.command }}</div>
+                        <div class="command-desc">{{ command.description[currentLanguage] }}</div>
+                    </div>
+                </div>
+                
+                <div class="buttons">
+                    <a :href="botLink" class="btn btn-add">
+                        <i class="fas fa-robot"></i>
+                        {{ translations.addBot[currentLanguage] }}
+                    </a>
+                    <div class="tooltip">
+                        <button class="btn btn-copy" @click="copyLink">
+                            <i class="far fa-copy"></i>
+                            {{ translations.copyLink[currentLanguage] }}
+                        </button>
+                        <span class="tooltiptext" v-if="copied">
+                            {{ translations.copied[currentLanguage] }}
+                        </span>
+                        <span class="tooltiptext" v-else>
+                            {{ translations.copyLink[currentLanguage] }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="index.js"></script>
+    <a href="https://github.com/RussianCyberAlliance" target="_blank" class="corner-credit">
+        By @RussianCyberAlliance
+    </a>
+</body>
+</html>
